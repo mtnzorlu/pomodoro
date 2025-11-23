@@ -75,7 +75,7 @@ body {
     height: 100%;
     width: 100%;
     background-color: #cc0000;
-    transition: width 0.3s ease, background-color 0.3s ease;
+    transition: width 0.3s ease;
     border-radius: 4px;
 }
 .buttons {

@@ -28,21 +28,13 @@ function updateProgressBar() {
         // Genişliği güncelle
         progressBar.style.width = percentage + '%';
         
-        // Renk interpolasyonu: moda göre
+        // Sabit renkler: moda göre
         if (currentMode === 'work') {
-            // Çalışma modu: kırmızıdan siyaha
-            // progress 1.0 (100%) -> kırmızı, progress 0.0 (0%) -> siyah
-            const red = Math.round(204 * progress); // 204 = #cc0000'ın kırmızı değeri
-            const green = 0;
-            const blue = 0;
-            progressBar.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+            // Çalışma modu: kırmızı kalır
+            progressBar.style.backgroundColor = '#cc0000';
         } else {
-            // Mola modu: yeşilden siyaha
-            // progress 1.0 (100%) -> yeşil, progress 0.0 (0%) -> siyah
-            const red = 0;
-            const green = Math.round(204 * progress); // Yeşil renk değeri
-            const blue = 0;
-            progressBar.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+            // Mola modu: yeşil kalır
+            progressBar.style.backgroundColor = '#00cc00';
         }
     } else {
         // Timer başlamamışsa gizle
