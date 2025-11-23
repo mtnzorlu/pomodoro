@@ -1,0 +1,13 @@
+{
+  "name": "Pomodoro",
+  "short_name": "Pomodoro",
+  "description": "Basit bir Pomodoro zamanlayıcı uygulaması.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "lang": "tr",
+  "orientation": "portrait-primary"
+}
+

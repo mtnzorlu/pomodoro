@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png" type="image/png">
+    <meta name="theme-color" content="#dc2626">
+    <link rel="manifest" href="manifest.webmanifest">
+    <title>Pomodoro</title>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Pomodoro" class="logo">
+        </div>
+        <div class="timer">
+            <div class="timer-display">
+                25:00
+            </div>
+            <div class="mode-indicator">Çalışma Modu</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+        <div class="buttons">
+            <button class="start-button" onclick="startWork()">Başlat (25 dk)</button>
+            <button class="break-button" onclick="startBreak()">Mola (5 dk)</button>
+            <button class="reset-button" onclick="resetTimer()">Reset</button> 
+        </div>
+        <div class="info-text">
+            <p>Pomodoro tekniği, odaklanmayı artırmak için zamanı 25 dakikalık çalışma ve 5 dakikalık kısa molalara böler.</p>
+            <p>Zamanlayıcıyı başlatır, 25 dakika çalıştıktan sonra 5 dakika mola verir ve bu işlemi çalışmanız tamamlanıncaya kadar sürdürürsünüz.</p>
+            <p>Dört pomodoro sonrasında 15-30 dakikalık uzun bir mola verilir.</p>
+            <p>Bu yöntem, verimliliği artırırken zihinsel yorgunluğu azaltır.</p>
+        </div>
+    </div>
+    <audio id="alarm-audio" src="sounds/alarm.mp3" preload="auto"></audio>
+    <script src="main.js"></script>
+</body>
+</html>
