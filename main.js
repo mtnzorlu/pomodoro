@@ -2,6 +2,7 @@ let remainingSeconds = 25 * 60;
 let intervalId = null;
 let currentMode = 'work'; // 'work' | 'break'
 let totalSeconds = 25 * 60; // Toplam süre (çalışma modu için 25 dakika)
+let endTimestamp = null; // Gerçek zamanlı bitiş zamanı (ms cinsinden)
 
 function formatTime(totalSeconds) {
     const minutes = Math.floor(totalSeconds / 60);
@@ -110,20 +111,31 @@ function stopAlarm() {
 }
 
 function tick() {
-    if (remainingSeconds > 0) {
-        remainingSeconds -= 1;
+    // Gerçek zamana göre hesapla (PWA / arka plan kısıtlamalarında kaymayı önler)
+    if (intervalId === null || endTimestamp === null) {
+        return;
+    }
+
+    const now = Date.now();
+    const diffMs = endTimestamp - now;
+    const newRemaining = Math.max(0, Math.round(diffMs / 1000));
+
+    if (newRemaining !== remainingSeconds) {
+        remainingSeconds = newRemaining;
         render();
-        if (remainingSeconds === 0) {
-            clearRunningInterval();
-            playAlarm();
-            setButtonsState({
-                startDisabled: false,
-                breakDisabled: false,
-                resetDisabled: false
-            });
-            setStartButtonLabel('Başlat (25 dk)');
-            setStartButtonActive(false);
-        }
+    }
+
+    if (remainingSeconds === 0) {
+        clearRunningInterval();
+        endTimestamp = null;
+        playAlarm();
+        setButtonsState({
+            startDisabled: false,
+            breakDisabled: false,
+            resetDisabled: false
+        });
+        setStartButtonLabel('Başlat (25 dk)');
+        setStartButtonActive(false);
     }
 }
 
@@ -132,6 +144,8 @@ function startCountdown(seconds, mode) {
     remainingSeconds = seconds;
     // Toplam süreyi kaydet (hem çalışma hem mola modu için)
     totalSeconds = seconds;
+    // Bitiş zamanını gerçek saate göre belirle
+    endTimestamp = Date.now() + seconds * 1000;
     render();
     clearRunningInterval();
     intervalId = setInterval(tick, 1000);
@@ -161,7 +175,15 @@ function startWork() {
     
     if (isRunning && isWorkMode) {
         // Timer çalışıyor ve çalışma modunda - Durdur
+        // Önce son kalan süreyi gerçek zamana göre hesapla
+        if (endTimestamp !== null) {
+            const now = Date.now();
+            const diffMs = endTimestamp - now;
+            remainingSeconds = Math.max(0, Math.round(diffMs / 1000));
+            render();
+        }
         clearRunningInterval();
+        endTimestamp = null; // Durdurulduğunda zaman sayacı durur
         setStartButtonLabel('Devam Et');
         setStartButtonActive(false);
         setButtonsState({
@@ -172,6 +194,7 @@ function startWork() {
     } else if (!isRunning && isWorkMode && remainingSeconds > 0) {
         // Timer durmuş ve çalışma modunda - Devam Et
         stopAlarm();
+        endTimestamp = Date.now() + remainingSeconds * 1000;
         intervalId = setInterval(tick, 1000);
         setStartButtonLabel('Durdur');
         setStartButtonActive(true);
@@ -197,6 +220,7 @@ function startBreak() {
 
 function resetTimer() {
     clearRunningInterval();
+    endTimestamp = null;
     remainingSeconds = currentMode === 'work' ? 25 * 60 : 5 * 60;
     totalSeconds = currentMode === 'work' ? 25 * 60 : 5 * 60;
     render();
