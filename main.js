@@ -225,6 +225,7 @@ setStartButtonLabel('Başlat (25 dk)');
     const isSecure = window.isSecureContext || window.location.protocol === 'https:';
     if (!isSecure && !isLocalhost) return;
     window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/service-worker.js').catch(function () { /* ignore */ });
+        const swUrl = new URL('service-worker.js', window.location.href);
+        navigator.serviceWorker.register(swUrl.href).catch(function () { /* ignore */ });
     });
 })();
